@@ -28,6 +28,12 @@ export class AuthService {
   makeComment(comment: Comentario):Observable<any>{
     return this.http.post(`${this.apiURL}comment`, comment)
   }
+  deletePost(id):Observable<any>{
+    return this.http.delete(`${this.apiURL}post/delete/${id}`)
+  }
+  deleteComment(id):Observable<any>{
+    return this.http.delete(`${this.apiURL}comm/delete/${id}`)
+  }
   getComments(post_id):Observable<any>{
 
     return this.http.get(`${this.apiURL}comment/get/${post_id}`)
@@ -38,6 +44,10 @@ export class AuthService {
   }
   post(post:Post):Observable<any>{
     return this.http.post(`${this.apiURL}posts`, post);
+  }
+
+  getUser(data): Observable<any>{
+    return this.http.post(`${this.apiURL}user/get`, data);
   }
 
   login(user: User2): Observable<any> {

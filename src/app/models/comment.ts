@@ -1,4 +1,6 @@
 export class Comentario {
+    id:number;
+    user:string;
     token:string;
     body:string;
     post_id:number;

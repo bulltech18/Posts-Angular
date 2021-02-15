@@ -18,12 +18,14 @@ export class MakePostComponent implements OnInit {
   post = new Post();
   posts: Post[] = [];
   posts2: Post2[] = [];
-  token:string;
+ 
   bandera: boolean = false;
   bandera2: boolean = false;
   comment = new Comentario()
   comments: Comentario[] = [];
   coment2 = new Comentario2();
+  user:string;
+  
 
   constructor(private postService:AuthService, private modalService: NgbModal) { }
 
@@ -31,7 +33,14 @@ export class MakePostComponent implements OnInit {
   
   ngOnInit(): void 
   {
+    const token = localStorage.getItem('token');
+  
+    const data = {
+      "token": token
+    }
+    console.log(data)
     this.postService.show().subscribe(data => {this.posts2 = data["data"]; console.log(this.posts2)})
+    this.postService.getUser(data).subscribe(data => {this.user = data["data"]; console.log(this.user)});
 
   }
   mostrarModalInfo(i:number){
@@ -43,6 +52,58 @@ export class MakePostComponent implements OnInit {
     console.log(id)
 
   }
+  borrarPost(i:number){
+    if (this.posts2[i].user == this.user){
+      const id = this.posts2[i].id
+      this.postService.deletePost(id).subscribe((data:any) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado Correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }, error => {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No puedes borrar este post'
+          })
+        })
+    }
+    else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No puedes borrar un post que no es tuyo!'
+          })
+    }
+  }
+  borrarComentario(i:number){
+    if (this.comments[i].user == this.user){
+      const id = this.comments[i].id
+      this.postService.deleteComment(id).subscribe((data:any) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado Correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }, error => {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No puedes borrar este Comentario'
+          })
+        })
+    }
+    else{
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No puedes borrar un comentario que no es tuyo!'
+          })
+    }
+  }
 
   crear (ngform: NgForm)
   {
@@ -50,11 +111,13 @@ export class MakePostComponent implements OnInit {
     const data: Post2 = 
     {
       "id": 0,
+      "user": "",
       "token": token,
       "title": ngform.control.value.title,
       "body": ngform.control.value.body
     }
     this.posts2.push(data)
+  
     this.postService.post(data).subscribe((data:any) =>{
       Swal.fire({
         icon: 'success',
@@ -81,6 +144,8 @@ export class MakePostComponent implements OnInit {
     const data: Comentario = 
     {
       "token": token,
+      "id": 0,
+      "user": "",
       "body": ngform.control.value.bodyC,
       "post_id": this.posts2[i].id
     }

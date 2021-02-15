@@ -52,6 +52,7 @@
         <div class="col-md-4">
         <div class="card text-white bg-dark mt-5 mb-5" style="width: 18rem;" *ngFor="let post of posts2; let i = index">
             <div class="card-body">
+              
               <h4 class="card-title" id="user" [innerHTML]="post.user"></h4>
             <b> <p class="card-text" [innerHTML]="post.title"></p></b>
               <p class="card-text" id="body" [innerHTML]="post.body"></p>
@@ -61,7 +62,7 @@
                   <input 
                   type="text" 
                   class="form-control" 
-                  id="bodyC"
+                  
                   name="bodyC"
                   #bodyC="ngModel"
                   [(ngModel)] = "comment.body"
@@ -69,10 +70,11 @@
                 </div>
                 <div class="form-group" >
 
-                  <button type="submit" id="comentar" class="btn btn-info">comment</button>
+                  <button type="submit"  class="btn btn-info">comment</button>
                 
               </div>
               </form>
+              <a type="button" class="card-link" (click)="borrarPost(i)">delete</a>
             </div>
             </div>
           </div>
@@ -91,10 +93,12 @@
     <div class="modal-body">
       
 
-               <div class="card text-white bg-dark mb-3" *ngFor="let comm of comments">
+               <div class="card text-white bg-dark mb-3" *ngFor="let comm of comments; let j = index">
                     <div class="card-body" >
                       <h5 [innerHTML]="comm.user"></h5>
                         <p [innerHTML]="comm.body"></p>
+                        <a type="button" class="card-link" (click)="borrarComentario(j)">delete</a>
+                        
                     </div>
                   </div>
                   

@@ -5,6 +5,7 @@ export class Post {
 }
 export class Post2 {
     id:number;
+    user:string;
     token:string;
     title:string;
     body:string;
